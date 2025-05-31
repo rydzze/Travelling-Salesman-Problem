@@ -1,6 +1,9 @@
-import numpy as np
+import os
+import time
+import json
 import random
 import operator
+import numpy as np
 import matplotlib.pyplot as plt
 
 class GA:
@@ -140,3 +143,28 @@ class GA:
             plt.show()
         
         return path_taken, min_cost
+    
+
+data_dir = 'data/'
+json_files = [f for f in os.listdir(data_dir) if f.endswith('.json')]
+json_files = sorted(json_files, key=lambda x: int(x.split('_')[1].split('.')[0]))
+
+for file_name in json_files:
+    file_path = os.path.join(data_dir, file_name)
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+
+    N = data["n_cities"]
+    adj = data["distance_matrix"]
+
+    start_time = time.time()
+    ga = GA(adj)
+    path_taken, min_cost = ga.genetic_algorithm(list(range(N)), show_plot=False)
+    end_time = time.time()
+    execution_time = end_time - start_time
+
+    print(f"\n=== File: {file_name} ===")
+    print("[+] Num. of Cities :", N)
+    print("[+] Execution Time : {:.4f} s".format(execution_time))
+    print("[+] Path Taken     :", ' '.join(map(str, path_taken)))
+    print("[+] Minimum Cost   :", min_cost)
