@@ -9,7 +9,7 @@ class TSPGenerator:
             random.seed(seed)
             np.random.seed(seed)
     
-    def generate_from_coordinates(self, n_cities: int, coordinate_range: int = 100) -> Tuple[np.ndarray, int]:
+    def generate_from_coordinates(self, n_cities: int, coordinate_range: int = 25) -> Tuple[np.ndarray, int]:
         cities = []
         for _ in range(n_cities):
             x = random.randint(0, coordinate_range)
@@ -28,7 +28,7 @@ class TSPGenerator:
         
         return n_cities, distance_matrix
 
-def create_coordinate_tsp(n_cities: int, coord_range: int = 100, seed=None):
+def create_coordinate_tsp(n_cities: int, coord_range: int = 25, seed=None):
     tsp = TSPGenerator(seed)
     
     return tsp.generate_from_coordinates(n_cities, coord_range)
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     print("\n=== Multiple TSP Data Generator ===")
     for i in range(5, 51, 5):
         print(f"\n[*] Generating TSP with {i} cities ...")
-        n, distances = create_coordinate_tsp(i, coord_range=100, seed=None)
+        n, distances = create_coordinate_tsp(i, coord_range=25, seed=None)
         export_to_json(n, distances, f"tsp_{i}.json", output_dir=output_dir)
         total_files += 1
     
