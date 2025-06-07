@@ -35,6 +35,8 @@ class GA:
             l = int(route[i])
             score = score + self.distance(city_list[k],city_list[l])
 
+        score += self.distance(city_list[route[-1]], city_list[route[0]])
+
         return score
 
     def crossover(self, a, b):
@@ -134,6 +136,7 @@ class GA:
         
         best_route = self.rank_routes(pop, city_list)[0]
         path_taken = pop[best_route[0]].tolist()
+        path_taken.append(path_taken[0])
         min_cost = str(best_route[1])
 
         if show_plot:
