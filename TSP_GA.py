@@ -169,5 +169,5 @@ for file_name in json_files:
     print(f"\n=== File: {file_name} ===")
     print("[+] Num. of Cities :", N)
     print("[+] Execution Time : {:.4f} s".format(execution_time))
-    print("[+] Path Taken     :", ' '.join(map(str, path_taken)))
+    print("[+] Path Taken     :", ' '.join(str(city + 1) for city in path_taken))
     print("[+] Minimum Cost   :", min_cost)
