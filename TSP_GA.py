@@ -1,3 +1,7 @@
+# This code was taken from GitHub repository and it is contributed by avitomar12
+# https://github.com/avitomar12/TSP-using-Genetic-Algorithm
+# https://medium.com/thecyphy/travelling-salesman-problem-using-genetic-algorithm-130ab957f165
+
 import os
 import time
 import json

@@ -1,3 +1,6 @@
+# This code was taken from GeeksforGeeks website and it is contributed by ng24_7
+# https://www.geeksforgeeks.org/traveling-salesman-problem-using-branch-and-bound-2/
+
 import os
 import math
 import json
