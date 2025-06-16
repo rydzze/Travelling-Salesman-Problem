@@ -1,8 +1,10 @@
-import numpy as np
-import json
-import time
+# This code was taken from GitHub repository and it is contributed by Paolo Lapo Cerni
+# https://github.com/paololapo/Simulated_annealing_for_TSP
+
 import os
-from glob import glob
+import time
+import json
+import numpy as np
 
 # ----------- SUPPORT FUNCTIONS -----------
 
@@ -30,7 +32,7 @@ def transpose(arr):
 
 # ----------- SIMULATED ANNEALING LIGHT -----------
 
-def SA_light(D, T0, T_f, alpha):
+def SA_light(D, T0=1000, T_f=1e-3, alpha=0.995):
     idx = np.arange(D.shape[1])
     conf_i = np.random.permutation(idx)
     conf_i = np.append(conf_i, conf_i[0])
@@ -59,10 +61,16 @@ def SA_light(D, T0, T_f, alpha):
 
 # ----------- SA RUNNER FOR JSON FILES -----------
 
-def run_sa_on_json(file_path, T0=1000, T_f=1e-3, alpha=0.995):
+data_dir = 'data/'
+json_files = [f for f in os.listdir(data_dir) if f.endswith('.json')]
+json_files = sorted(json_files, key=lambda x: int(x.split('_')[1].split('.')[0]))
+
+for file_name in json_files:
+    file_path = os.path.join(data_dir, file_name)
     with open(file_path, 'r') as f:
         data = json.load(f)
 
+    N = data["n_cities"]
     if "distance_matrix" in data:
         D = np.array(data["distance_matrix"])
     elif "cities" in data:
@@ -71,23 +79,13 @@ def run_sa_on_json(file_path, T0=1000, T_f=1e-3, alpha=0.995):
     else:
         raise ValueError(f"{file_path} does not contain required keys.")
 
-    start = time.time()
-    final_path, min_cost = SA_light(D, T0, T_f, alpha)
-    exec_time = time.time() - start
-
-    file_name = os.path.basename(file_path)
-    N = D.shape[0]
+    start_time = time.time()
+    path_taken, min_cost = SA_light(D)
+    end_time = time.time()
+    execution_time = end_time - start_time
 
     print(f"\n=== File: {file_name} ===")
     print("[+] Num. of Cities :", N)
-    print("[+] Execution Time : {:.4f} s".format(exec_time))
-    print("[+] Path Taken     :", ' '.join(str(city + 1) for city in final_path))
-    print("[+] Minimum Cost   :", round(min_cost, 3))
-
-# ----------- MAIN LOOP -----------
-
-folder_path = r"C:\Users\12213\OneDrive\Desktop\TSP.SA\Data"
-json_files = sorted(glob(os.path.join(folder_path, "*.json")))
-
-for file_path in json_files:
-    run_sa_on_json(file_path)
+    print("[+] Execution Time : {:.4f} s".format(execution_time))
+    print("[+] Path Taken     :", ' '.join(str(city + 1) for city in path_taken))
+    print("[+] Minimum Cost   :", min_cost)
